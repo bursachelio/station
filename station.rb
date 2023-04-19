@@ -1,146 +1,136 @@
-  class Station
-    attr_accessor :name_st
-  
-    def initialize(name_st)
-      @name_st = name_st
-      @list_tr = {}
-    end
-  
-    def accept(train)
-      @list_tr[train.num] = { 'type' => train.type, 'vag' => train.vag }
-    end
-  
-    def list_all_tr
-      @list_tr.each { |key, value| puts "#{key} #{value}" }
-    end
-  
-    def list_for_type(type)
-      @list_tr.each { |key, value| puts "#{key} #{value}" if type == value['type'] }
-    end
-  
-    def to_send(num)
-      @list_tr.delete(num)
-    end
-  end
-  
-  class Route
-    attr_accessor :start_st, :finish_st, :list_route
-  
-    def initialize(start_st, finish_st)
-      @start_st = start_st
-      @finish_st = finish_st
-      @list_route = [@start_st, @finish_st]
-    end
-  
-    def add_st(station)
-      @list_route.insert(1, station)
-    end
-  
-    def del_st(station)
-      for i in 0..@list_route.length - 1
-        if @list_route[i].name_st == station
-          @list_route.delete_at(i)
-          break
-        end
-      end
-    end
-  
-    def list_info
-      @list_route.each { |x| puts x.name_st }
-    end
-  end
-  
-  class Train
-    attr_accessor :type, :num, :vag, :speed
-  
-    def initialize(speed, num, type, vag)
-      @speed = speed
-      @num = num
-      @type = type
-      @vag = vag
-    end
-  
-    def sped_plus(speed)
-      @speed = speed
-    end
-  
-    def stop(speed = 0)
-      @speed = speed
-    end
-  
-    def speed_info
-      puts @speed
-    end
-  
-    def change_vag_1(ch)
-      if @speed == 0
-        if ch > 0
-          @vag += 1
-        else
-          @vag -= 1
-        end
-      end
-    end
-  
-    def vag_info
-      puts @vag
-    end
-  
-    def add_route(route)
-      @route = route
-      @index_cur_st = 0
-      puts "Маршрут поезда назначен, поезд находится на станции #{route.list_route[@index_cur_st].name_st}"
-      @lenght_route = @route.list_route.length - 1
-    end
+class Station
+  attr_accessor :name, :trains
 
-    def change_st_1(ch_st)
-      if ch_st > 0
-        if @index_cur_st != @lenght_route
-          @index_cur_st += 1
-        else
-          puts "Поезд находится на конечной станции"
-        end
-      else 
-        if @index_cur_st != 0
-          @index_cur_st -= 1
-        else
-          puts "Поезд находится на первой станции"
-        end
-      end
-    end
+  def initialize(name)
+    @name = name
+    @trains = []
+  end
 
-    def route_info
-      if @index_cur_st > 0 && @index_cur_st != @lenght_route
-        puts "Поезд находится на станции #{@route.list_route[@index_cur_st].name_st}, предыдущая станция #{@route.list_route[@index_cur_st - 1].name_st}, следущая станция #{@route.list_route[@index_cur_st + 1].name_st} "
-      elsif @index_cur_st > 0 && @index_cur_st == @lenght_route
-        puts "Предыдущая станция #{@route.list_route[@index_cur_st - 1].name_st}, поезд находится на последней станции #{@route.list_route[@index_cur_st].name_st}, просьба выйти из вагона. Уважаемые пассажиры, обращаем ваше внимание, что за нахождение в поезде, следующем в тупик, предусмотрена административная ответственность в соответствии с законодательством Российской Федерации. "
-      elsif @index_cur_st == 0
-        puts "Поезд находится на первой станции #{@route.list_route[@index_cur_st].name_st}, следущая станция #{@route.list_route[@index_cur_st + 1].name_st} "
+  def accept(train)
+    trains[train.num] =  [ train.num, train.type, train.vag]
+  end
+
+  def list_all_tr
+    trains.each { |v| print v }
+  end
+
+  def list_for_type(type)
+    trains.select {|train| train.type == type}
+  end
+
+  def to_send(num)
+    trains.delete(num)
+  end
+end
+
+class Route
+  attr_accessor :start_station, :finish_station, :stations
+
+  def initialize(start_station, finish_station)
+    @start_station = start_station
+    @finish_station = finish_station
+    @stations = [@start_station, @finish_station]
+  end
+
+  def add_station(station)
+    @stations.insert(1, station)
+  end
+
+  def del_station(station)
+    for i in 0..@stations.length - 1
+      if @stations[i].name == station
+        @stations.delete_at(i)
+        break
       end
     end
   end
+
+  def list_info
+    @stations.each { |x| puts x.name }
+  end
+end
+
+class Train
+  attr_reader :route, :current_station_index
+  attr_accessor :type, :num, :vag, :speed
+
+  def initialize(num, type, vag)
+    @num = num
+    @type = type
+    @vag = vag
+  end
+
+  def speed_plus(speed)
+    @speed = speed
+  end
+
+  def stop(speed = 0)
+    @speed = speed
+  end
+
+  def change_vag_1(ch)
+    if @speed == 0
+      if ch > 0
+        @vag += 1
+      else
+        @vag -= 1
+      end
+    end
+  end
+
+  def assign_station(route)
+    @route = route
+    @current_station_index = 0
+    puts "Маршрут поезда назначен, поезд находится на станции #{route.stations[current_station_index].name}"
+  end
+
+  def next_station
+    route.stations[current_station_index + 1]
+  end
+
+  def back_station
+    route.stations[current_station_index - 1]
+  end
   
-train_1 = Train.new(0, 1, 'cargo', 6)
-train_2 = Train.new(0, 2, 'pass', 10)
+  def go_next_station
+    @current_station_index += 1 if next_station
+  end
+
+  def go_back_station
+    @current_station_index -= 1 if back_station
+  end
+
+  def route_info
+    if current_station_index > 0 && current_station_index != route.stations.length - 1
+      puts "Поезд находится на станции #{route.stations[current_station_index].name}, предыдущая станция #{route.stations[current_station_index - 1].name}, следущая станция #{route.stations[current_station_index + 1].name} "
+    elsif current_station_index > 0 && current_station_index == route.stations.length - 1
+      puts "Предыдущая станция #{route.stations[current_station_index - 1].name}, поезд находится на последней станции #{route.stations[current_station_index].name}, просьба выйти из вагона. Уважаемые пассажиры, обращаем ваше внимание, что за нахождение в поезде, следующем в тупик, предусмотрена административная ответственность в соответствии с законодательством Российской Федерации. "
+    elsif current_station_index == 0
+      puts "Поезд находится на первой станции #{route.stations[current_station_index].name}, следущая станция #{route.stations[current_station_index + 1].name} "
+    end
+  end
+end
+
+train_1 = Train.new(1, 'cargo', 6)
+train_2 = Train.new(2, 'pass', 10)
 station_1 = Station.new('Planernaya')
 station_2 = Station.new('Pushkinskaya')
 station_3 = Station.new('Ryazanskyi prospekt')
-route = Route.new(station_1, station_3)
+route_1 = Route.new(station_1, station_3)
 station_1.accept(train_1)
 station_1.accept(train_2)
-route.add_st(station_2)
-route.list_info
-train_1.speed_info
-train_1.change_vag_1(2)
-train_1.vag_info
-train_1.add_route(route)
-train_1.change_st_1(2)
+station_1.list_all_tr
+train_1.speed_plus(60)
+train_1.stop
+puts train_1.speed
+route_1.add_station(station_2)
+route_1.list_info
+train_1.change_vag_1(1)
+puts train_1.vag
+train_1.assign_station(route_1)
+train_1.next_station
+train_1.go_next_station
 train_1.route_info
-train_1.change_st_1(2)
+train_1.next_station
+train_1.go_next_station
 train_1.route_info
-
-  # route.list_info
-  # puts "----------------"
-  # route.del_st("Pushkinskaya")
-  # route.list_info
-  
