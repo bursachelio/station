@@ -1,7 +1,7 @@
 require_relative 'train'
 require_relative 'route'
 require_relative 'station'
-#require_relative 'wagons'
+require_relative 'vagons'
 
 trains = []
 routes = []
@@ -97,14 +97,14 @@ loop do
     if train.type == 'pass'
       puts "Введите количество мест в вагоне:"
       seats = gets.chomp.to_i
-      wagon = PassengerWagon.new(seats)
+      vagon = PassengerVagon.new(seats)
     elsif train.type == 'cargo'
       puts "Введите объем вагона:"
       volume = gets.chomp.to_f
-      wagon = CargoWagon.new(volume)
+      vagon = CargoVagon.new(capacity)
     end
 
-    train.add_vagon(wagon)
+    train.add_vagon(vagon)
     puts "Вагон добавлен к поезду #{train.num}"
 
   when 7
@@ -113,7 +113,7 @@ loop do
     train_choice = gets.chomp.to_i
     train = trains[train_choice - 1]
 
-    train.detach_wagon
+    train.remove_vagon
     puts "Вагон отцеплен от поезда #{train.num}"
 
   when 8
@@ -145,7 +145,7 @@ loop do
 
   when 9
     puts "Список станций:"
-    stations.each_with_index { |station, index| puts "#{index + 1} - #{station}" }
+    route.list_info
 
   when 10
     puts "Выберите станцию:"

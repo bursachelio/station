@@ -1,6 +1,6 @@
 class Train
   attr_reader :route, :current_station_index, :vagons
-  attr_accessor :num, :speed
+  attr_accessor :num, :speed, :type
 
   def initialize(num, type, speed = 0)
     @num = num
@@ -50,7 +50,7 @@ class Train
   end
 
   def add_vagon(vagon)
-    if @speed == 0 && train.type == vagon.type
+    if @speed == 0 && @type == vagon.type_vagon
       @vagons << vagon
     else
       puts "Невозможно добавить вагон"
