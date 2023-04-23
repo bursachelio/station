@@ -95,12 +95,8 @@ loop do
     train = trains[train_choice - 1]
 
     if train.type == 'pass'
-      puts "Введите количество мест в вагоне:"
-      seats = gets.chomp.to_i
       vagon = PassengerVagon.new(seats)
     elsif train.type == 'cargo'
-      puts "Введите объем вагона:"
-      volume = gets.chomp.to_f
       vagon = CargoVagon.new(capacity)
     end
 

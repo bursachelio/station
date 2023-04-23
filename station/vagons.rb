@@ -9,17 +9,15 @@ end
 class PassengerVagon < Vagon
   attr_reader :seats
 
-  def initialize(seats)
+  def initialize
     super("pass")
-    @seats = seats
   end
 end
 
 class CargoVagon < Vagon
   attr_reader :capacity
 
-  def initialize(capacity)
+  def initialize
     super("cargo")
-    @capacity = capacity
   end
 end
