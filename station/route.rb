@@ -1,3 +1,5 @@
+require_relative 'station'
+
 class Route
     attr_accessor :start_station, :finish_station, :stations
   
@@ -21,6 +23,6 @@ class Route
     end
   
     def list_info
-      @stations.each { |x| puts x.name }
+      @stations.each { |x| puts x}
     end
 end
