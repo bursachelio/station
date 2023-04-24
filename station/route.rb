@@ -23,6 +23,8 @@ class Route
     end
   
     def list_info
-      @stations.each { |x| puts x}
+      puts "Список станций в маршруте :"
+      @stations.each { |x| print "#{x.name}, "}
+      puts " "
     end
 end

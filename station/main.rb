@@ -27,6 +27,7 @@ class Main
       @trains << train
       puts "Поезд типа cargo добавлен в список грузовых поездов"
     end
+  end
 
   def create_route
     puts "Введите начальную станцию маршрута:"
@@ -42,7 +43,7 @@ class Main
 
   def control_route
     puts "Выберите маршрут:"
-    @routes.each_with_index { |route, index| puts "#{index + 1} - #{route.start_station} - #{route.finish_station}" }
+    @routes.each_with_index { |route, index| puts "#{index + 1} - #{route.start_station.name} - #{route.finish_station.name}" }
     choice = gets.chomp.to_i
     route = @routes[choice - 1]
     loop do
@@ -77,7 +78,7 @@ class Main
     train_choice = gets.chomp.to_i
     train = @trains[train_choice - 1]
     puts "Выберите маршрут:"
-    @routes.each_with_index { |route, index| puts "#{index + 1} - #{route.start_station} - #{route.finish_station}" }
+    @routes.each_with_index { |route, index| puts "#{index + 1} - #{route.start_station.name} - #{route.finish_station.name}" }
     route_choice = gets.chomp.to_i
     route = @routes[route_choice - 1]
     train.assign_route(route)
@@ -135,10 +136,10 @@ class Main
 
   def list_stations
     puts "Выберите маршрут:"
-    @routes.each_with_index { |route, index| puts "#{index + 1} - #{route.start_station} - #{route.finish_station}" }
+    @routes.each_with_index { |route, index| puts "#{index + 1} - #{route.start_station.name} - #{route.finish_station.name}" }
     choice = gets.chomp.to_i
     route = @routes[choice - 1]
-    puts "Cписок станций на данном маршруте: #{route.list_info}"
+    route.list_info
   end
 end
 
@@ -178,13 +179,12 @@ main = Main.new
       main.list_stations
     when 9
       puts "Выберите станцию:"
-      stations.each_with_index { |station, index| puts "#{index + 1} - #{station}" }
+      @stations.each_with_index { |station, index| puts "#{index + 1} - #{station}" }
       choice = gets.chomp.to_i
-      station = stations[choice - 1]
+      station = @stations[choice - 1]
       puts "Поезда на станции #{station}:"
       station.trains.each { |train| puts "#{train.num} - #{train.type}, количество вагонов: #{train.carriages.count}" }
     when 0
       break
     end
   end
-end

@@ -20,7 +20,7 @@ class Train
   def assign_route(route)
     @route = route
     @current_station_index = 0
-    puts "Маршрут поезда назначен, поезд находится на станции #{route.stations[current_station_index]}"
+    puts "Маршрут поезда назначен, поезд находится на станции #{route.stations[current_station_index].name}"
   end
 
   def next_station
@@ -41,11 +41,11 @@ class Train
 
   def route_info
     if current_station_index > 0 && current_station_index != route.stations.length - 1
-      puts "Поезд находится на станции #{route.stations[current_station_index]}, предыдущая станция #{route.stations[current_station_index - 1]}, следущая станция #{route.stations[current_station_index + 1]} "
+      puts "Поезд находится на станции #{route.stations[current_station_index].name}, предыдущая станция #{route.stations[current_station_index - 1].name}, следущая станция #{route.stations[current_station_index + 1].name} "
     elsif current_station_index > 0 && current_station_index == route.stations.length - 1
-      puts "Предыдущая станция #{route.stations[current_station_index - 1]}, поезд находится на последней станции #{route.stations[current_station_index]}, просьба выйти из вагона. Уважаемые пассажиры, обращаем ваше внимание, что за нахождение в поезде, следующем в тупик, предусмотрена административная ответственность в соответствии с законодательством Российской Федерации."
+      puts "Предыдущая станция #{route.stations[current_station_index - 1].name}, поезд находится на последней станции #{route.stations[current_station_index].name}, просьба выйти из вагона. Уважаемые пассажиры, обращаем ваше внимание, что за нахождение в поезде, следующем в тупик, предусмотрена административная ответственность в соответствии с законодательством Российской Федерации."
     elsif current_station_index == 0
-      puts "Поезд находится на первой станции #{route.stations[current_station_index]}, следущая станция #{route.stations[current_station_index + 1]}"
+      puts "Поезд находится на первой станции #{route.stations[current_station_index].name}, следущая станция #{route.stations[current_station_index + 1].name}"
     end
   end
 
