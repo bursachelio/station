@@ -13,8 +13,8 @@ class Train
     @speed = speed
   end
 
-  def stop(speed = 0)
-    @speed = speed
+  def stop
+    @speed = 0
   end
 
   def assign_route(route)
@@ -63,5 +63,9 @@ class Train
     else
       puts "Невозможно отцепить вагон"
     end
+  end
+
+  def vagons_info
+    @vagons.each {|v| print v.num_vagon}
   end
 end
