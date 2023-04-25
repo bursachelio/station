@@ -9,7 +9,7 @@ class Train
     @vagons = []
   end
 
-  private
+  private #сюда я тащу все методы которые не задействуются в других классах
 
   def speed_plus(speed)
     @speed = speed
@@ -19,6 +19,10 @@ class Train
     @speed = 0
   end
 
+  def vagons_info
+    @vagons.each {|v| print v.num_vagon}
+  end
+# Все в модификаторе доступа public, так как эти методы используются в другиз классах
   public
 
   def assign_route(route)
@@ -71,9 +75,5 @@ class Train
     else
       puts "Невозможно отцепить вагон"
     end
-  end
-
-  def vagons_info
-    @vagons.each {|v| print v.num_vagon}
   end
 end

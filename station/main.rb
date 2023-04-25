@@ -96,8 +96,7 @@ class Main
     route_choice = gets.chomp.to_i
     route = @routes[route_choice - 1]
     train.assign_route(route)
-    route.start_station.trains << train
-    puts route.start_station.trains[train_choice - 1].num
+    route.start_station.accept(train)
   end
 
   def attach_vagon
@@ -140,14 +139,14 @@ class Main
       direction = gets.chomp.to_i
       case direction
       when 1
-        train.at_the_station.trains.pop
         train.go_next_station
-        train.next_station.trains << train
+        train.at_the_station.accept(train)
+        train.back_station.del_train(train)
         puts "Поезд #{train.num} #{train.route_info}"
       when 2  
-        train.at_the_station.trains.pop
         train.go_back_station
-        train.back_station.trains << train
+        train.at_the_station.accept(train)
+        train.next_station.del_train(train)
         puts "Поезд #{train.num} #{train.route_info}"
       when 0
         break
@@ -171,52 +170,6 @@ class Main
     choice = gets.chomp.to_i
     station = @stations[choice - 1]
     puts "Поезда на станции #{station.name}:"
-    @station.trains.each { |train| puts "#{train.num} - #{train.type}" }
+    station.trains.each { |train| puts "#{train.num} - #{train.type}" }
   end
 end
-
-main = Main.new
-=begin
-  loop do
-    puts "Выберите действие:"
-    puts "1 - Создать станцию"
-    puts "2 - Создать поезд"
-    puts "3 - Создать маршрут"
-    puts "4 - Управление маршрутом"
-    puts "5 - Назначить маршрут поезду"
-    puts "6 - Добавить вагон к поезду"
-    puts "7 - Отцепить вагон от поезда"
-    puts "8 - Переместить поезд по маршруту"
-    puts "9 - Просмотреть список станций"
-    puts "10 - Просмотреть список поездов на станции"
-    puts "0 - Выход"
-    choice = gets.chomp.to_i
-
-      case choice
-    when 1
-      main.create_station
-    when 2
-      main.create_train
-    when 3
-      main.create_route
-    when 4
-      main.control_route
-    when 5
-      main.appoint_route
-    when 6
-      main.attach_vagon
-    when 7
-      main.unhook_vagon
-    when 8
-      main.moving_train
-    when 9
-      main.list_stations
-    when 10
-      main.list_trains_on_stations
-    when 0
-      break
-    else
-      puts "Неверный выбор"
-    end
-  end
-=end

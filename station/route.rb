@@ -1,5 +1,5 @@
 require_relative 'station'
-
+# Все в модификаторе доступа public, так как эти методы используются в другиз классах
 class Route
     attr_accessor :start_station, :finish_station, :stations
   
