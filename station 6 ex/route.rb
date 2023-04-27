@@ -1,6 +1,8 @@
 require_relative 'station'
 # Все в модификаторе доступа public, так как эти методы используются в другиз классах
 class Route
+
+  include InstanceCounter
     attr_accessor :start_station, :finish_station, :stations
   
     def initialize(start_station, finish_station)

@@ -1,5 +1,6 @@
 class Station
   
+  include InstanceCounter
   @@all_stations
   attr_accessor :name, :trains 
 # Все в модификаторе доступа public, так как эти методы используются в другиз классах
