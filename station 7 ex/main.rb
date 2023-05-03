@@ -119,17 +119,25 @@ class Main
     train_choice = gets.chomp.to_i
     train = @trains[train_choice - 1]
     if train.type == 'pass'
-      puts "Введите номер вагона :"
-      num_vagon = gets.chomp.to_i
-      puts "Введите производителя вагона :"
-      manufacturer = gets.chomp.to_s
-      vagon = PassengerVagon.new(num_vagon, manufacturer)
+      begin
+        puts "Введите номер вагона :"
+        num_vagon = gets.chomp.to_i
+        puts "Введите производителя вагона :"
+        manufacturer = gets.chomp.to_s
+        vagon = PassengerVagon.new(num_vagon, manufacturer)
+      rescue
+        puts "Ошибка при создании вагона: #{e.message}"
+      end
     elsif train.type == 'cargo'
-      puts "Введите номер вагона :"
-      num_vagon = gets.chomp.to_i
-      puts "Введите производителя вагона :"
-      manufacturer = gets.chomp.to_s
-      vagon = CargoVagon.new(num_vagon, manufacturer)
+      begin
+        puts "Введите номер вагона :"
+        num_vagon = gets.chomp.to_i
+        puts "Введите производителя вагона :"
+        manufacturer = gets.chomp.to_s
+        vagon = CargoVagon.new(num_vagon, manufacturer)
+      rescue
+        puts "Ошибка при создании вагона: #{e.message}"
+      end
     end
     train.add_vagon(vagon)
     puts "Вагон прицеплен к поезду #{train.num}, список вагонов : #{train.vagons}"
