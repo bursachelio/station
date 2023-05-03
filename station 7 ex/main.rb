@@ -15,45 +15,57 @@ class Main
   end
 
   def create_station
-    puts "Введите название станции :"
-    name = gets.chomp.to_s
-    station = Station.new(name)
-    @stations << station
-    puts "Станция #{station.name} была добавлена в список станций"
-  end
-
-  def create_train
-    puts "Введите номер поезда:"
-    num = gets.chomp.to_s
-    puts "Введите тип поезда:"
-    type = gets.chomp
-    puts "Введите производителя поезда:"
-    manufacturer = gets.chomp
-    train = Train.new(num, type, manufacturer)
-    puts "Поезд с номером #{train.num} типа #{type} от производителя #{manufacturer} создан"
-    if type == "pass"
-      @passenger_trains << train
-      @trains << train
-      puts "Поезд типа pass добавлен в список пассажирских поездов"
-    elsif type == "cargo" 
-      @cargo_trains << train
-      @trains << train
-      puts "Поезд типа cargo добавлен в список грузовых поездов"
+    begin
+      puts "Введите название станции :"
+      name = gets.chomp
+      station = Station.new(name)
+      @stations << station
+      puts "Станция #{station.name} была добавлена в список станций"
+    rescue => e
+      puts "Ошибка при создании станции: #{e.message}"
     end
   end
 
+  def create_train
+    begin
+      puts "Введите номер поезда:"
+      num = gets.chomp
+      puts "Введите тип поезда:"
+      type = gets.chomp
+      puts "Введите производителя поезда:"
+      manufacturer = gets.chomp
+      train = Train.new(num, type, manufacturer)
+      puts "Поезд с номером #{train.num} типа #{type} от производителя #{manufacturer} создан"
+      if type == "pass"
+        @passenger_trains << train
+        @trains << train
+        puts "Поезд типа pass добавлен в список пассажирских поездов"
+      elsif type == "cargo" 
+        @cargo_trains << train
+        @trains << train
+        puts "Поезд типа cargo добавлен в список грузовых поездов"
+      end
+    rescue => e
+      puts "Ошибка при создании поезда: #{e.message}"
+    end
+  end   
+
   def create_route
-    puts "Введите начальную станцию маршрута:"
-    start_station = gets.chomp
-    start_station = Station.new(start_station)
-    @stations << start_station
-    puts "Введите конечную станцию маршрута:"
-    finish_station = gets.chomp
-    finish_station = Station.new(finish_station)
-    @stations << finish_station
-    route = Route.new(start_station, finish_station)
-    puts "Маршрут #{route.start_station.name} - #{route.finish_station.name} создан"
-    @routes << route
+    begin
+      puts "Введите начальную станцию маршрута:"
+      start_station = gets.chomp
+      start_station = Station.new(start_station)
+      @stations << start_station
+      puts "Введите конечную станцию маршрута:"
+      finish_station = gets.chomp
+      finish_station = Station.new(finish_station)
+      @stations << finish_station
+      route = Route.new(start_station, finish_station)
+      puts "Маршрут #{route.start_station.name} - #{route.finish_station.name} создан"
+      @routes << route
+    rescue => e
+      puts "Ошибка при создании маршрута: #{e.message}"
+    end
   end
 
   def control_route

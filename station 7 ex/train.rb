@@ -29,20 +29,19 @@ class Train
 
   def valid?
     validate!
-  rescue
+  rescue => e
     false
   end
 
-  private
+  
 
+  private #сюда я тащу все методы которые не задействуются в других классах
+  
   def validate!
     raise "Номер поезда не может быть пустым" if num.nil?
     raise "Номер поезда не соответствует формату" if num !~ NUMBER_FORMAT
-    raise "Производитель поезда не может быть пустым" if manufacturer.nil?
     true
   end
-
-  private #сюда я тащу все методы которые не задействуются в других классах
 
   def vagons_info
     @vagons.each {|v| print v.num_vagon}
