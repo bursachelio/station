@@ -6,7 +6,7 @@ module Manufacturer
     end
 
     def valid?
-        validate!
+        true
     rescue
         false
     end

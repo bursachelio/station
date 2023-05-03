@@ -9,21 +9,14 @@ class Vagon
     @num_vagon = num_vagon
     @type_vagon = type_vagon
     @manufacturer = manufacturer
-    validate!
   end
 
   def valid?
-    validate!
+    true
   rescue
     false
   end
 
-  private
-
-  def validate!
-    raise "Номер вагона не может быть пустым" if num_vagon.nil?
-    raise "Тип поезда не может быть пустым" if type_vagon.nil?
-  end
 end
 
 

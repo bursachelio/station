@@ -9,22 +9,13 @@ class Route
       @start_station = start_station
       @finish_station = finish_station
       @stations = [@start_station, @finish_station]
-      validate!
     end
 
     def valid?
-      validate!
+      true
     rescue
       false
     end
-
-    private
-
-    def validate!
-      raise "Имя станции не может быть пустым" if start_station.nil? || finish_station.nil?
-    end
-
-    public
   
     def add_station(station)
       @stations.insert(1, station)

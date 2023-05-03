@@ -6,6 +6,8 @@ require_relative 'pass_train'
 
 class Main
 
+  NUMBER_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i
+
   def initialize
     @cargo_trains = []
     @passenger_trains = []
@@ -18,54 +20,85 @@ class Main
     begin
       puts "Введите название станции :"
       name = gets.chomp
-      station = Station.new(name)
-      @stations << station
-      puts "Станция #{station.name} была добавлена в список станций"
-    rescue => e
-      puts "Ошибка при создании станции: #{e.message}"
+      raise "Название станции не может быть пустым!" if name.empty?
+    rescue StandardError => e
+      puts "Ошибка: #{e.message}" 
+      return
     end
+    station = Station.new(name)
+    @stations << station
+    puts "Станция #{station.name} была добавлена в список станций"
   end
 
   def create_train
+
     begin
       puts "Введите номер поезда:"
       num = gets.chomp
+      raise "Номер поезда не может быть пустым!" if num.empty?
+      raise "Номер поезда не соответствует формату!" if num !~ NUMBER_FORMAT
+    rescue StandardError => e
+      puts "Ошибка: #{e.message}" 
+      return
+    end
+  
+    begin
       puts "Введите тип поезда:"
       type = gets.chomp
+      raise "Неверный тип поезда. Он может быть pass или cargo!" unless type == "pass" || type == "cargo"
+    rescue StandardError => e
+      puts "Ошибка: #{e.message}" 
+      return
+    end
+  
+    begin
       puts "Введите производителя поезда:"
       manufacturer = gets.chomp
-      train = Train.new(num, type, manufacturer)
-      puts "Поезд с номером #{train.num} типа #{type} от производителя #{manufacturer} создан"
-      if type == "pass"
-        @passenger_trains << train
-        @trains << train
-        puts "Поезд типа pass добавлен в список пассажирских поездов"
-      elsif type == "cargo" 
-        @cargo_trains << train
-        @trains << train
-        puts "Поезд типа cargo добавлен в список грузовых поездов"
-      end
-    rescue => e
-      puts "Ошибка при создании поезда: #{e.message}"
+      raise "Имя производителя не может быть пустым!" if manufacturer.empty?
+    rescue StandardError => e
+      puts "Ошибка: #{e.message}" 
+      return
     end
-  end   
+  
+    train = Train.new(num, type, manufacturer)
+    puts "Поезд с номером #{train.num} типа #{type} от производителя #{manufacturer} создан"
+  
+    if type == "pass"
+      @passenger_trains << train
+      @trains << train
+      puts "Поезд типа pass добавлен в список пассажирских поездов"
+    elsif type == "cargo"
+      @cargo_trains << train
+      @trains << train
+      puts "Поезд типа cargo добавлен в список грузовых поездов"
+    end
+  end  
 
   def create_route
     begin
       puts "Введите начальную станцию маршрута:"
       start_station = gets.chomp
-      start_station = Station.new(start_station)
-      @stations << start_station
+      raise "Имя станции не может быть пустым" if start_station.empty?
+    rescue StandardError => e
+      puts "Ошибка: #{e.message}" 
+      return
+    end
+    start_station = Station.new(start_station)
+    @stations << start_station
+      
+    begin
       puts "Введите конечную станцию маршрута:"
       finish_station = gets.chomp
-      finish_station = Station.new(finish_station)
-      @stations << finish_station
-      route = Route.new(start_station, finish_station)
-      puts "Маршрут #{route.start_station.name} - #{route.finish_station.name} создан"
-      @routes << route
-    rescue => e
-      puts "Ошибка при создании маршрута: #{e.message}"
+      raise "Имя станции не может быть пустым" if finish_station.empty?
+    rescue StandardError => e
+      puts "Ошибка: #{e.message}" 
+      return
     end
+    finish_station = Station.new(finish_station)
+    @stations << finish_station
+    route = Route.new(start_station, finish_station)
+    puts "Маршрут #{route.start_station.name} - #{route.finish_station.name} создан"
+    @routes << route
   end
 
   def control_route
@@ -114,30 +147,58 @@ class Main
   end
 
   def attach_vagon
-    puts "Выберите поезд:"
+    puts "Выберите поезд: "
     @trains.each_with_index { |train, index| puts "#{index + 1} - #{train.num}" }
     train_choice = gets.chomp.to_i
     train = @trains[train_choice - 1]
+    
+    begin
+      puts "Введите тип вагона: "
+      type_vagon = gets.chomp
+      raise "Тип вагона не может быть пустым!" if type_vagon.empty?
+    rescue StandardError => e
+      puts "Ошибка: #{e.message}" 
+        return
+    end
+      
     if train.type == 'pass'
       begin
         puts "Введите номер вагона :"
-        num_vagon = gets.chomp.to_i
+        num_vagon = gets.chomp
+        raise "Номер вагона не может быть пустым!" if num_vagon.empty?
+      rescue StandardError => e
+        puts "Ошибка: #{e.message}" 
+        return
+      end
+
+      begin
         puts "Введите производителя вагона :"
         manufacturer = gets.chomp.to_s
-        vagon = PassengerVagon.new(num_vagon, manufacturer)
-      rescue
-        puts "Ошибка при создании вагона: #{e.message}"
+        raise "Имя производителя вагона не может быть пустым!" if num_vagon.empty?
+      rescue StandardError => e
+        puts "Ошибка: #{e.message}" 
+        return
       end
+
     elsif train.type == 'cargo'
       begin
         puts "Введите номер вагона :"
-        num_vagon = gets.chomp.to_i
+        num_vagon = gets.chomp
+        raise "Номер вагона не может быть пустым!" if num_vagon.empty?
+      rescue StandardError => e
+        puts "Ошибка: #{e.message}" 
+        return
+      end
+
+      begin
         puts "Введите производителя вагона :"
         manufacturer = gets.chomp.to_s
-        vagon = CargoVagon.new(num_vagon, manufacturer)
-      rescue
-        puts "Ошибка при создании вагона: #{e.message}"
+        raise "Имя производителя вагона не может быть пустым!" if num_vagon.empty?
+      rescue StandardError => e
+        puts "Ошибка: #{e.message}" 
+        return
       end
+      vagon = CargoVagon.new(num_vagon, manufacturer)
     end
     train.add_vagon(vagon)
     puts "Вагон прицеплен к поезду #{train.num}, список вагонов : #{train.vagons}"
