@@ -10,12 +10,6 @@ class Route
       @finish_station = finish_station
       @stations = [@start_station, @finish_station]
     end
-
-    def valid?
-      true
-    rescue
-      false
-    end
   
     def add_station(station)
       @stations.insert(1, station)

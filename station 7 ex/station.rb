@@ -10,9 +10,11 @@ class Station
     @name = name
     @trains = []
     @@all_stations << self
+    validate!
   end
 
   def valid?
+    validate!
     true
   rescue => e
     false
@@ -31,6 +33,10 @@ class Station
   end
 
   private #сюда я тащу все методы которые не задействуются в других классах
+
+  def validate!
+    raise "Название станции не может быть пустым!" if name.empty?
+  end
 
   def list_all_tr
     trains.each { |train| puts train }

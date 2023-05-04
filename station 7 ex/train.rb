@@ -2,7 +2,8 @@ require_relative "manufacturer"
 require_relative "instance_counter"
 
 class Train
-
+  
+  NUMBER_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i
   include InstanceCounter
 
   @@trains = []
@@ -23,15 +24,28 @@ class Train
     @manufacturer = manufacturer
     @@trains << self
     register_instance
+    validate!
   end
 
   def valid?
+    validate!
     true
   rescue => e
     false
   end
 
   private #сюда я тащу все методы которые не задействуются в других классах
+
+  def validate!
+    errors = []
+    errors << "Номер поезда не может быть пустым!" if num.empty?
+    errors << "Номер поезда не соответствует формату!" if num !~ NUMBER_FORMAT
+    errors << "Тип поезда не может быть пустым!" if type.empty?
+    errors << "Неверный тип поезда. Он может быть pass или cargo!" unless ["pass", "cargo"].include?(type)
+    errors << "Имя производителя не может быть пустым!" if manufacturer.empty?
+    raise errors.join("\n") unless errors.empty?
+  end
+  
 
   def vagons_info
     @vagons.each {|v| print v.num_vagon}
