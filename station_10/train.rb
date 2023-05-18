@@ -28,10 +28,11 @@ class Train
     @vagons = []
     @vagons_count = 0
     @manufacturer = manufacturer
+    validate!
     @@trains << self
     register_instance
-    validate!
   end
+  
 
   def each_vagon(&block)
     @vagons.each(&block)
